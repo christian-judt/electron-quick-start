@@ -35,8 +35,15 @@ function createWindow () {
       },
       label: "Unmaximize"
     });
+    const menuItemClose = new MenuItem({
+      click: () => {
+        mainWindow.close()
+      },
+      label: "Close"
+    });
     menu.append(menuItemMaximize)
     menu.append(menuItemUnmaximize)
+    menu.append(menuItemClose)
     menu.popup(mainWindow)
   });
 
