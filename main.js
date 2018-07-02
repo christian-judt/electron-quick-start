@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, Menu, MenuItem} = require('electron')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -7,13 +7,38 @@ let mainWindow
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow = new BrowserWindow({width: 800, height: 600, minWidth: 800, minHeight: 600, frame: false })
 
   // and load the index.html of the app.
   mainWindow.loadFile('index.html')
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
+
+  // Setup a context menu to allow maximize and unmaximize at runtime for a
+  // frameless window without (re)implementing an application bar for this window.
+  mainWindow.webContents.on("context-menu", (e, properties) => {
+    e.preventDefault()
+
+    // window.webContents.openDevTools();
+    // create context menu for devtools
+    const menu = new Menu();
+    const menuItemMaximize = new MenuItem({
+      click: () => {
+        mainWindow.maximize()
+      },
+      label: "Maximize"
+    });
+    const menuItemUnmaximize = new MenuItem({
+      click: () => {
+        mainWindow.unmaximize()
+      },
+      label: "Unmaximize"
+    });
+    menu.append(menuItemMaximize)
+    menu.append(menuItemUnmaximize)
+    menu.popup(mainWindow)
+  });
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
