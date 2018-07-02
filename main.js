@@ -15,10 +15,11 @@ function createWindow () {
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
 
-  // Close menu item for convenience.
+  // Add close menu item for convenience.
   mainWindow.webContents.on("context-menu", (e, properties) => {
     e.preventDefault()
 
+	// Create context menu
     const menu = new Menu();
     const menuItemClose = new MenuItem({
       click: () => {
