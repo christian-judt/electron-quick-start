@@ -20,8 +20,7 @@ function createWindow () {
   mainWindow.webContents.on("context-menu", (e, properties) => {
     e.preventDefault()
 
-    // window.webContents.openDevTools();
-    // create context menu for devtools
+    // Create context menu
     const menu = new Menu();
     const menuItemMaximize = new MenuItem({
       click: () => {
