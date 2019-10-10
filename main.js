@@ -12,7 +12,8 @@ function createWindow () {
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true
     }
   })
 
@@ -51,3 +52,47 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+const rendererObjectsForMain = {};
+const mainObjectForRenderer =
+{
+  synchronousMethod: () =>
+  {
+    return "synchronousMain";
+  },
+  callbackMethod: (callback) =>
+  {
+    setTimeout(() => callback("callbackMain"), 1000);
+  },
+  promiseMethod: (callback) =>
+  {
+    return new Promise(resolve =>
+    {
+      setTimeout(() => resolve("promiseMain"), 1000);
+    });
+  },
+  setRendererObjectForMain: (rendererId, object) =>
+  {
+    rendererObjectsForMain[rendererId] = object;
+  },
+  invokeSynchronousRendererObjectMethodFromMain: (rendererId) =>
+  {
+    return rendererObjectsForMain[rendererId].synchronousMethod()
+  },
+  invokeCallbackRendererObjectMethodFromMain: (rendererId) =>
+  {
+    return new Promise(resolve =>
+    {
+      rendererObjectsForMain[rendererId].callbackMethod(resolve);
+    });
+  },
+  invokePromiseRendererObjectMethodFromMain: (rendererId) =>
+  {
+    return new Promise(resolve =>
+    {
+      resolve(rendererObjectsForMain[rendererId].promiseMethod());
+    });
+  }
+}
+
+module.exports.mainObjectForRenderer = mainObjectForRenderer;
