@@ -27,9 +27,9 @@ const addResult = (name, expected, actual) =>
 
 (async () =>
 {
-    addResult("Synchronous from renderer to main", "synchronousMain", await mainObjectForRenderer.synchronousMethod());
-    addResult("Asynchronous from renderer to main using callback", "callbackMain", await new Promise(resolve => mainObjectForRenderer.callbackMethod(resolve)));
-    addResult("Asynchronous from renderer to main using promise", "promiseMain", await mainObjectForRenderer.promiseMethod());
+    addResult("Synchronous RPC from renderer to main", "synchronousMain", await mainObjectForRenderer.synchronousMethod());
+    addResult("Asynchronous RPC from renderer to main using callback", "callbackMain", await new Promise(resolve => mainObjectForRenderer.callbackMethod(resolve)));
+    addResult("Asynchronous RPC from renderer to main using promise", "promiseMain", await mainObjectForRenderer.promiseMethod());
 
     const rendererId = `renderer_${require('electron').remote.getCurrentWindow().id}`;
     mainObjectForRenderer.setRendererObjectForMain(rendererId,
@@ -51,7 +51,7 @@ const addResult = (name, expected, actual) =>
         }
     });
 
-    addResult("Synchronous from main to renderer", "synchronousRenderer", await mainObjectForRenderer.invokeSynchronousRendererObjectMethodFromMain(rendererId));
-    addResult("Asynchronous from main to renderer using callback", "callbackRenderer", await mainObjectForRenderer.invokeCallbackRendererObjectMethodFromMain(rendererId));
-    addResult("Asynchronous from main to renderer using promise", "promiseRenderer", await mainObjectForRenderer.invokePromiseRendererObjectMethodFromMain(rendererId));
+    addResult("Synchronous RPC from main to renderer", "synchronousRenderer", await mainObjectForRenderer.invokeSynchronousRendererObjectMethodFromMain(rendererId));
+    addResult("Asynchronous RPC from main to renderer using callback", "callbackRenderer", await mainObjectForRenderer.invokeCallbackRendererObjectMethodFromMain(rendererId));
+    addResult("Asynchronous RPC from main to renderer using promise", "promiseRenderer", await mainObjectForRenderer.invokePromiseRendererObjectMethodFromMain(rendererId));
 })();
