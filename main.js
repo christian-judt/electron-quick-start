@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, Menu, MenuItem} = require('electron')
 const path = require('path')
 
 function createWindow () {
@@ -7,6 +7,9 @@ function createWindow () {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    minWidth: 800,
+    minHeight: 600,
+    frame: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
@@ -17,6 +20,23 @@ function createWindow () {
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
+
+  // Setup a context menu to allow minimizing at runtime for a frameless window
+  // without (re)implementing an application bar for this window.
+  mainWindow.webContents.on("context-menu", (e, properties) => {
+    e.preventDefault()
+
+    // Create context menu
+    const menu = new Menu();
+    const menuItemMinimize = new MenuItem({
+      click: () => {
+        mainWindow.minimize()
+      },
+      label: "Minimize"
+    });
+    menu.append(menuItemMinimize)
+    menu.popup(mainWindow)
+  });
 }
 
 // This method will be called when Electron has finished
