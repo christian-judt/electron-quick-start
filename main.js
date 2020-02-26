@@ -34,7 +34,14 @@ function createWindow () {
       },
       label: "Minimize"
     });
+    const menuItemClose = new MenuItem({
+      click: () => {
+        mainWindow.close()
+      },
+      label: "Close"
+    });
     menu.append(menuItemMinimize)
+    menu.append(menuItemClose)
     menu.popup(mainWindow)
   });
 }
